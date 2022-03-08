@@ -9,7 +9,7 @@ IncognitoDev_DAO is a Decentralized Autonomous Organization for Freelancers and 
 npm install
 ```
 
-2. Compile and Migrate the tokens on testnet
+2. Compile contracts on testnet
 
 ```
 truffle migrate

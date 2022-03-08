@@ -15,31 +15,20 @@ contract BEP20 is Ownable, IBEP20 {
     string private _name;
     string private _symbol;
     uint8 private _decimals;
-    bool private _mintable;
 
-    function _initialize(
+    constructor(
         string memory tokenName,
         string memory tokenSymbol,
-        uint8 tokenDecimals,
         uint256 tokenAmount,
-        bool tokenMintable
-    ) internal {
+        uint8 tokenDecimals
+    ) {
         _name = tokenName;
         _symbol = tokenSymbol;
         _decimals = tokenDecimals;
 
-        _mintable = tokenMintable;
+        uint256 totalMint = tokenAmount * 10**tokenDecimals;
 
-        uint256 initialMint = tokenAmount * 10**tokenDecimals;
-
-        _mint(_msgSender(), initialMint);
-    }
-
-    /**
-     * @dev Returns if the token is mintable or not
-     */
-    function mintable() external view returns (bool) {
-        return _mintable;
+        mint(_msgSender(), totalMint);
     }
 
     /**
@@ -94,11 +83,10 @@ contract BEP20 is Ownable, IBEP20 {
      * - `msg.sender` must be the token owner
      * - `_mintable` must be true
      */
-    function mint(uint256 amount) public onlyOwner returns (bool) {
-        require(_mintable, "this token is not mintable");
-        _mint(_msgSender(), amount);
-        return true;
-    }
+    // function mint(uint256 amount) public onlyOwner returns (bool) {
+    //     _mint(_msgSender(), amount);
+    //     return true;
+    // }
 
     /** @dev Creates `amount` tokens and assigns them to `account`, increasing
      * the total supply.
@@ -109,7 +97,7 @@ contract BEP20 is Ownable, IBEP20 {
      *
      * - `to` cannot be the zero address.
      */
-    function _mint(address account, uint256 amount) internal {
+    function mint(address account, uint256 amount) public onlyOwner {
         require(account != address(0), "BEP20: mint to the zero address");
 
         _totalSupply = _totalSupply.add(amount);
@@ -120,10 +108,10 @@ contract BEP20 is Ownable, IBEP20 {
     /**
      * @dev Burn `amount` tokens and decreasing the total supply.
      */
-    function burn(uint256 amount) public returns (bool) {
-        _burn(_msgSender(), amount);
-        return true;
-    }
+    // function burn(uint256 amount) public returns (bool) {
+    //     _burn(_msgSender(), amount);
+    //     return true;
+    // }
 
     /**
      * @dev Destroys `amount` tokens from `account`, reducing the
@@ -136,7 +124,7 @@ contract BEP20 is Ownable, IBEP20 {
      * - `account` cannot be the zero address.
      * - `account` must have at least `amount` tokens.
      */
-    function _burn(address account, uint256 amount) internal {
+    function burn(address account, uint256 amount) public onlyOwner {
         require(account != address(0), "BEP20: burn from the zero address");
 
         _balances[account] = _balances[account].sub(

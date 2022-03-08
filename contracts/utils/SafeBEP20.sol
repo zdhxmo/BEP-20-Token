@@ -7,7 +7,7 @@ import "../IBEP20.sol";
 import "./Address.sol";
 
 /**
- * @title SafeIBEP20
+ * @title SafeBEP20
  * @dev Wrappers around IBEP20 operations that throw on failure (when the token
  * contract returns false). Tokens that return no value (and instead revert or
  * throw on failure) are also supported, non-reverting calls are assumed to be

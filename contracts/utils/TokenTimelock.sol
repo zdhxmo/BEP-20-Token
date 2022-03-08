@@ -3,7 +3,8 @@
 
 pragma solidity ^0.8.0;
 
-import "./utils/SafeBEP20.sol";
+import "./SafeBEP20.sol";
+import "../../node_modules/@openzeppelin/contracts/security/ReentrancyGuard.sol";
 
 /**
  * @dev A token holder contract that will allow a beneficiary to extract the
@@ -12,7 +13,7 @@ import "./utils/SafeBEP20.sol";
  * Useful for simple vesting schedules like "advisors get all of their tokens
  * after 1 year".
  */
-contract TokenTimelock {
+contract TokenTimelock is ReentrancyGuard {
     using SafeBEP20 for IBEP20;
 
     // Basic token contract being held
@@ -68,7 +69,7 @@ contract TokenTimelock {
      * @dev Transfers tokens held by the timelock to the beneficiary. Will only succeed if invoked after the release
      * time.
      */
-    function release() public virtual {
+    function release() public virtual nonReentrant {
         require(
             block.timestamp >= releaseTime(),
             "TokenTimelock: current time is before release time"
